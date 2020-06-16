@@ -25,12 +25,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    topography/topography.cpp \
+    unit/dynamicoptions.cpp \
+    test.cpp \
+    topography/topographycontroller.cpp
 
 HEADERS += \
         mainwindow.h \
     unit/area.h \
-    unit/options.h
+    unit/options.h \
+    topography/topography.h \
+    unit/dynamicoptions.h \
+    test.h \
+    topography/topographycontroller.h
 
 FORMS += \
         mainwindow.ui
