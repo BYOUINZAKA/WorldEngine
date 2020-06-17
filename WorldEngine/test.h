@@ -9,6 +9,10 @@ class test : public QObject
 public:
     explicit test(QObject *parent = nullptr);
     static int value;
+    inline int operator()() const
+    {
+        return value;
+    }
 
 signals:
 

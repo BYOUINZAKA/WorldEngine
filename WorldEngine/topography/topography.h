@@ -21,6 +21,8 @@ public:
                         SizeType _width,
                         QObject *parent = nullptr);
 
+    float avgHeight() const;
+
 signals:
 
 public slots:
