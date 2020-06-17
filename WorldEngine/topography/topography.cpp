@@ -1,11 +1,10 @@
 // #define ISDEBUGGING
 #include "topography.h"
 #ifdef QT_DEBUG
-#   include <QDebug>
+#include <QDebug>
 #endif
 #include <algorithm>
 #include "unit/dynamicoptions.h"
-
 
 Topography::Topography(SizeType _length, SizeType _width, QObject *parent)
     : QObject(parent),

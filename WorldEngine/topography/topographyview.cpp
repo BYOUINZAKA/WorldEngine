@@ -2,7 +2,7 @@
 #include "ui_topographyview.h"
 
 #ifdef QT_DEBUG
-#   include <QDebug>
+#include <QDebug>
 #endif
 
 #include <QPainter>
@@ -20,6 +20,7 @@ TopographyView::TopographyView(Topography *model, QWidget *parent)
     this->resize(800, 800);
     translator = QTransform{this->width() / (double)model->getWidth(), 0, 0, this->height() / (double)model->getLength(), 0, 0};
     ui->setupUi(this);
+    connect(model, &Topography::refreshed, this, &TopographyView::paintGL);
 }
 
 TopographyView::TopographyView(const TopographyController &tc, QWidget *parent)
@@ -40,9 +41,9 @@ void TopographyView::paintGL()
     auto width = model->getWidth(), length = model->getLength();
     auto it = model->begin();
 
-    for(int i = 0; i < length; ++i)
+    for (int i = 0; i < length; ++i)
     {
-        for(int j = 0; j < width; ++j, ++it)
+        for (int j = 0; j < width; ++j, ++it)
         {
             painter.setPen(QPen{altitudeToColor(*it)});
             painter.drawPoint(j, i);

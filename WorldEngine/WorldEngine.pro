@@ -42,7 +42,8 @@ HEADERS += \
     test.h \
     topography/topographycontroller.h \
     topography/topographyview.h \
-    unit/colors.h
+    unit/colors.h \
+    topography/functional.h
 
 FORMS += \
         mainwindow.ui \

@@ -10,29 +10,29 @@
 #include <QObject>
 
 #include "topography.h"
+#include "functional.h"
 
 #ifdef QT_DEBUG
 #include <QDebug>
+#include <QThread>
 #endif
 
 class TopographyController : public QObject
 {
     Q_OBJECT
 public:
-    explicit TopographyController(Topography *_model = nullptr, QObject *parent = nullptr);
-
-    void meteor(int x, int y, double r, const std::function<double(double)> &mapping, double p = 0.25);
-    void buildRandomMap(const std::function<double()> &);
-    void buildRandomMap(const std::function<double(double, double)> & =
-                            [](double d, double m) {
-                                return (m - d) / m;
-                            });
-    float convolution(int x, int y, int level) const;
-    void convolution(int level = 1);
+    explicit TopographyController(Topography *_model, QObject *parent = nullptr);
 
 signals:
+    void inited();
 
 public slots:
+    void init();
+    void meteor(int x, int y, double r, std::function<double(double)> mapping, double p);
+    void buildRandomMap(std::function<double()>);
+    void buildRandomMap(std::function<double(double, double)> = &Shape::mountain);
+    float convolution(int x, int y, int level) const;
+    void convolution(int level = 1);
 
 private:
     Topography *model;
@@ -46,9 +46,9 @@ public:
               Result (F<T>::*)(decltype(generator) &) = &F<T>::operator()>
     void meteors(
         int n,
-        std::pair<int, int> range = {10, 80},
-        double p = 0.25,
-        const std::function<double(double)> &mapping = [](double r) { return std::tanh(r - 1) + 0.5; })
+        std::pair<float, float> range = {10.0, 80.0},
+        double p = 0.5,
+        std::function<double(double)> mapping = &Mapping::extreme<1>)
     {
         auto dis = 1.0 / range.first - 1.0 / range.second;
 
@@ -66,24 +66,24 @@ public:
 
     template <typename T, typename... Args>
     typename std::enable_if<std::is_integral<T>::value>::type
-    multiConvolution(T arg, Args... args)
+    multiConvolution(T &&arg, Args &&... args)
     {
-        convolution(arg);
-        return multiConvolution(args...);
+        convolution(std::forward<T>(arg));
+        multiConvolution(std::forward<Args>(args)...);
     }
 
     template <typename T>
     typename std::enable_if<std::is_integral<T>::value>::type
-    multiConvolution(T arg)
+    multiConvolution(T &&arg)
     {
-        convolution(arg);
+        convolution(std::forward<T>(arg));
     }
 
     template <typename... Args>
-    void intelligentBuild(int meteoCount, Args... args)
+    void intelligentBuild(int meteoCount, Args &&... args)
     {
         meteors(meteoCount);
-        multiConvolution(args...);
+        multiConvolution(std::forward<Args>(args)...);
     }
 
     inline Topography *getModel() const

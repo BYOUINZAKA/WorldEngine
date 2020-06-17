@@ -24,6 +24,7 @@ public:
     float avgHeight() const;
 
 signals:
+    void refreshed();
 
 public slots:
 
