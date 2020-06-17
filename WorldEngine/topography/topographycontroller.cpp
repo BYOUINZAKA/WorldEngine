@@ -1,4 +1,5 @@
 #include "topographycontroller.h"
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 
@@ -11,7 +12,8 @@ TopographyController::TopographyController(Topography *_model, QObject *parent)
 {
 }
 
-void TopographyController::buildRandom(std::function<double(double, double)> strategy)
+
+void TopographyController::buildRandomMap(const std::function<double(double, double)>& strategy)
 {
     auto width = model->getWidth(), length = model->getLength();
     auto it = model->begin();
@@ -27,7 +29,9 @@ void TopographyController::buildRandom(std::function<double(double, double)> str
         for (int j = 0; j < width; ++j, ++it)
         {
             double idis = i - halfLength, jdis = j - halfWidth;
-            it->altitude = random(generator) * heightDis * strategy(std::sqrt(idis * idis) + std::sqrt(jdis * jdis), maxDis);
+            it->altitude = random(generator)
+                           * heightDis
+                           * strategy(std::sqrt(idis * idis) + std::sqrt(jdis * jdis), maxDis);
         }
     }
 }

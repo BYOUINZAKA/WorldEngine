@@ -1,11 +1,7 @@
 #include "mainwindow.h"
 
-#include <random>
-#include <chrono>
-
 #include <QApplication>
 #include <QDebug>
-#include <QVarLengthArray>
 
 #include "topography/topographycontroller.h"
 
@@ -15,15 +11,11 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    Topography topography;
-    TopographyController topographyController(&topography);
+    TopographyController topographyController;
+    TopographyView topographyView{topographyController, &w};
 
-    topographyController.buildRandom();
-
-    for(auto &&i : topography)
-    {
-        qDebug("%lf", i.altitude);
-    }
-
+    topographyController.buildRandomMap();
+    qDebug("%f", topographyView.avgHeight());
+    qDebug("%d", topographyController.getModel()->getRealSize() * sizeof(Area));
     return a.exec();
 }

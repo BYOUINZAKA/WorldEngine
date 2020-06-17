@@ -29,7 +29,8 @@ SOURCES += \
     topography/topography.cpp \
     unit/dynamicoptions.cpp \
     test.cpp \
-    topography/topographycontroller.cpp
+    topography/topographycontroller.cpp \
+    topography/mapitem.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,7 +39,8 @@ HEADERS += \
     topography/topography.h \
     unit/dynamicoptions.h \
     test.h \
-    topography/topographycontroller.h
+    topography/topographycontroller.h \
+    topography/mapitem.h
 
 FORMS += \
         mainwindow.ui
