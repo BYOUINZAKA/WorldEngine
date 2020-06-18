@@ -12,6 +12,7 @@ Topography::Topography(SizeType _length, SizeType _width, QObject *parent)
       width(_width),
       map(_length * _width)
 {
+    emit refreshed();
 }
 
 Topography::Topography(QObject *parent)

@@ -9,18 +9,19 @@
 #include "topography/topographycontroller.h"
 #include "topography/topographyview.h"
 #include "test.h"
+#include "unit/optional.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    w.resize(800, 800);
     w.show();
 
     QThread thread;
 
     Topography tp;
-    TopographyView tpv{&tp, &w};
+    TopographyView tpv{&tp};
+    tpv.show();
 
     TopographyController tpc{&tp};
 
@@ -31,7 +32,6 @@ int main(int argc, char *argv[])
     });
 
     thread.start();
-    tpv.show();
 
     return a.exec();
 }

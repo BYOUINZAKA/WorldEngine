@@ -36,25 +36,33 @@ private:
 public:
     inline ValueType &at(SizeType i, SizeType j)
     {
+#ifdef QT_DEBUG
         assert(i >= 0 && i < getLength() && j >= 0 && j < getWidth());
+#endif
         return map[i * width + j];
     }
 
     inline const ValueType &at(SizeType i, SizeType j) const
     {
+#ifdef QT_DEBUG
         assert(i >= 0 && i < getLength() && j >= 0 && j < getWidth());
+#endif
         return map[i * width + j];
     }
 
     inline MapType::Iterator at(SizeType i)
     {
+#ifdef QT_DEBUG
         assert(i >= 0 && i < getLength());
+#endif
         return map.begin() + i * width;
     }
 
     inline MapType::ConstIterator at(SizeType i) const
     {
+#ifdef QT_DEBUG
         assert(i >= 0 && i < getLength());
+#endif
         return map.cbegin() + i * width;
     }
 

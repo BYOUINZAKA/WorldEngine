@@ -105,10 +105,10 @@ void TopographyController::convolution(int level)
 
 void TopographyController::init()
 {
-    buildRandomMap(&Shape::normal);
+    buildRandomMap(&Shape::basin);
     meteors(25, {80, 200}, 0.5, &Mapping::extreme<3>);
     multiConvolution(1, 2);
-    meteors(600, {10, 80}, 0.5);
+    meteors(500, {10, 80}, 0.5);
     multiConvolution(1, 2, 3);
     emit inited();
 }

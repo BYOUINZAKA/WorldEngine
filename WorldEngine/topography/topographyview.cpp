@@ -23,8 +23,8 @@ TopographyView::TopographyView(Topography *model, QWidget *parent)
     connect(model, &Topography::refreshed, this, &TopographyView::paintGL);
 }
 
-TopographyView::TopographyView(const TopographyController &tc, QWidget *parent)
-    : TopographyView{tc.getModel(), parent}
+TopographyView::TopographyView(const TopographyController &tpc, QWidget *parent)
+    : TopographyView{tpc.getModel(), parent}
 {
 }
 
@@ -49,4 +49,9 @@ void TopographyView::paintGL()
             painter.drawPoint(j, i);
         }
     }
+}
+
+void TopographyView::mousePressEvent(QMouseEvent *ev)
+{
+
 }

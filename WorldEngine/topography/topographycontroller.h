@@ -14,7 +14,6 @@
 
 #ifdef QT_DEBUG
 #include <QDebug>
-#include <QThread>
 #endif
 
 class TopographyController : public QObject
@@ -54,7 +53,7 @@ public:
 
         F<T> random_x{0, model->getWidth() - 1};
         F<T> random_y{0, model->getLength() - 1};
-        std::uniform_real_distribution<> random_r{1e-6, 1};
+        std::uniform_real_distribution<> random_r{1e-6, 1.0};
         for (int _ = 0; _ < n; ++_)
         {
             auto x = random_x(generator);

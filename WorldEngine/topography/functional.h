@@ -20,6 +20,7 @@ namespace Shape
     {
         return d / m;
     }
+
 } // namespace Shape
 
 namespace Mapping
@@ -45,6 +46,7 @@ namespace Mapping
     {
         return r;
     }
+
 } // namespace Mapping
 
 #endif // FUNCTIONAL_H

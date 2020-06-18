@@ -31,7 +31,8 @@ SOURCES += \
     test.cpp \
     topography/topographycontroller.cpp \
     topography/topographyview.cpp \
-    unit/colors.cpp
+    unit/colors.cpp \
+    unit/optional.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     topography/topographycontroller.h \
     topography/topographyview.h \
     unit/colors.h \
-    topography/functional.h
+    topography/functional.h \
+    unit/optional.h
 
 FORMS += \
         mainwindow.ui \
