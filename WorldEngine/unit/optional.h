@@ -5,9 +5,7 @@
 #include <utility>
 #include <type_traits>
 
-class EBadOptionalAccess : public std::exception
-{
-};
+class EBadOptionalAccess : public std::exception {};
 
 template <class T>
 class Optional
