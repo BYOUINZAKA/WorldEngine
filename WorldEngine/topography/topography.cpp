@@ -4,6 +4,7 @@
 #include <QDebug>
 #endif
 #include <algorithm>
+
 #include "unit/dynamicoptions.h"
 
 Topography::Topography(SizeType _length, SizeType _width, QObject *parent)

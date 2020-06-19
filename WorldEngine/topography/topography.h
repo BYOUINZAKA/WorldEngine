@@ -101,14 +101,25 @@ public:
         return map.end();
     }
 
-    inline bool enable(SizeType i) const
+    inline bool accepted(SizeType i) const
     {
         return i >= 0 && i < getLength();
     }
 
-    inline bool enable(SizeType i, SizeType j) const
+    inline bool accepted(SizeType i, SizeType j) const
     {
-        return enable(i) && j >= 0 && j < getWidth();
+        return accepted(i) && j >= 0 && j < getWidth();
+    }
+
+    template <
+        typename T,
+        typename U = typename std::remove_reference<T>::type,
+        typename X = decltype(&U::x),
+        typename Y = decltype(&U::y)>
+    constexpr bool accepted(T &&point) const
+    {
+        return accepted(static_cast<SizeType>(std::forward<T>(point).y()),
+                        static_cast<SizeType>(std::forward<T>(point).x()));
     }
 };
 

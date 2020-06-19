@@ -20,7 +20,7 @@ namespace ColorTraits
             std::is_arithmetic<typename std::remove_reference<T>::type>::value ||
                 std::is_arithmetic<typename std::remove_cv<T>::type>::value,
             bool>::type
-        enable(T &&value)
+        accepted(T &&value)
     {
         return std::forward<T>(value) >= 0 && std::forward<T>(value) <= 255;
     }
@@ -32,9 +32,9 @@ namespace ColorTraits
                 (std::is_arithmetic<typename std::remove_reference<T>::type>::value ||
                  std::is_arithmetic<typename std::remove_cv<T>::type>::value),
             bool>::type
-        enable(T &&value, Args &&... args)
+        accepted(T &&value, Args &&... args)
     {
-        return enable(std::forward<T>(value)) && enable(std::forward<Args>(args)...);
+        return accepted(std::forward<T>(value)) && accepted(std::forward<Args>(args)...);
     }
 
     template <class T>
@@ -53,7 +53,7 @@ namespace ColorTraits
         {
             int value = 155 + int(100.0 * (altitude - minAltitude) / (horizon - minAltitude));
 #ifdef QT_DEBUG
-            assert(enable(value));
+            assert(accepted(value));
 #endif
             return QColor{0, 0, value};
         }
@@ -61,9 +61,9 @@ namespace ColorTraits
         {
             int value = 255 - int(255.0 * (maxAltitude - altitude) / (maxAltitude - horizon));
 #ifdef QT_DEBUG
-            assert(enable(value));
+            assert(accepted(value));
 #endif
-            return QColor{value, 255, 0};
+            return QColor{value, 200, 0};
         }
     }
 } // namespace ColorTraits

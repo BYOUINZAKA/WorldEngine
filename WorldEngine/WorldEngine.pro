@@ -30,7 +30,8 @@ SOURCES += \
     unit/dynamicoptions.cpp \
     test.cpp \
     topography/topographycontroller.cpp \
-    topography/topographyview.cpp
+    topography/topographyview.cpp \
+    topography/tools/topographymessage.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,10 +44,14 @@ HEADERS += \
     topography/topographyview.h \
     unit/colors.h \
     topography/functional.h \
-    unit/optional.h
+    unit/optional.h \
+    topography/tools/topographymessage.h
 
 FORMS += \
         mainwindow.ui \
-    topography/topographyview.ui
+    topography/topographyview.ui \
+    topography/tools/topographymessage.ui
 
 CONFIG += c++17
+
+VERSION = 20-6-19

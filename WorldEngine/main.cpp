@@ -6,6 +6,7 @@
 
 #include "topography/topographycontroller.h"
 #include "topography/topographyview.h"
+#include "unit/optional.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,7 +17,7 @@ int main(int argc, char *argv[])
     QThread thread{&w};
 
     Topography model;
-    TopographyView view{&model};
+    TopographyView view{&model, 3};
 
     TopographyController controller{&model};
     controller.moveToThread(&thread);

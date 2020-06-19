@@ -1,13 +1,16 @@
 #ifndef TOPOGRAPHYMESSAGE_H
 #define TOPOGRAPHYMESSAGE_H
 
-#include <QDialog>
+#include <QFrame>
 
-namespace Ui {
+#include "unit/area.h"
+
+namespace Ui
+{
     class TopographyMessage;
 }
 
-class TopographyMessage : public QDialog
+class TopographyMessage : public QFrame
 {
     Q_OBJECT
 
@@ -17,6 +20,15 @@ public:
 
 private:
     Ui::TopographyMessage *ui;
+
+public slots:
+    void setMessage(QMouseEvent *event, int x, int y, const Area &msg);
+
+public:
+    enum
+    {
+        kMaxDisplayTime = 5000
+    };
 };
 
 #endif // TOPOGRAPHYMESSAGE_H

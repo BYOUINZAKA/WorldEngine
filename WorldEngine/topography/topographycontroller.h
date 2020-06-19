@@ -30,8 +30,9 @@ public slots:
     void meteor(int x, int y, double r, std::function<double(double)> mapping, double p);
     void buildRandomMap(std::function<double()>);
     void buildRandomMap(std::function<double(double, double)> = &Shape::mountain);
-    float convolution(int x, int y, int level) const;
     void convolution(int level = 1);
+    void refreshStatus();
+    float convolution(int x, int y, int level) const;
 
 private:
     Topography *model;

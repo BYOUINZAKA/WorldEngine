@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <iterator>
 
 #include <QThread>
 
@@ -88,35 +89,45 @@ void TopographyController::meteor(int x, int y, double r, std::function<double(d
 
 float TopographyController::convolution(int x, int y, int level) const
 {
-    auto width = model->getWidth(), length = model->getLength();
-    assert(x >= level && y >= level && x < width - level && y < length - level);
+    int i_begin = y - level, i_end = y + level + 1;
+    int j_begin = x - level, j_end = x + level + 1;
+
     double sum = 0.0;
-    for (int i = y - level; i <= y + level; ++i)
+    for (int i = i_begin; i < i_end; ++i)
     {
-        for (int j = x - level; j <= x + level; ++j)
+        for (int j = j_begin; j < j_end; ++j)
         {
-            sum += model->at(i, j).altitude;
+            sum += model->accepted(i, j) ? model->at(i, j).altitude : 0.0;
         }
     }
-    emit model->refreshed();
 
+    emit model->refreshed();
     return sum / std::pow(2 * level + 1, 2);
 }
 
 void TopographyController::convolution(int level)
 {
     auto width = model->getWidth(), length = model->getLength();
-    for (int y = level; y < length - level; ++y)
-        for (int x = level; x < width - level; ++x)
+    for (int y = 0; y < length; ++y)
+        for (int x = 0; x < width; ++x)
             model->at(y, x).altitude = convolution(x, y, level);
+}
+
+void TopographyController::refreshStatus()
+{
+    for(auto it = model->begin(); it != model->end(); ++it)
+    {
+        it->defaultTemp();
+    }
 }
 
 void TopographyController::init()
 {
-    buildRandomMap(&Shape::basin);
+    buildRandomMap(&Shape::mountain);
     meteors(25, {80, 200}, 0.5, &Mapping::extreme<2>);
     multiConvolution(1, 2);
     meteors(500, {10, 80}, 0.5, &Mapping::normal);
     multiConvolution(1, 2, 3);
+    refreshStatus();
     emit inited();
 }

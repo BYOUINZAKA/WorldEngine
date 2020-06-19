@@ -2,7 +2,7 @@
  * @Author: Hata
  * @Date: 2020-06-18 19:09:39
  * @LastEditors: Hata
- * @LastEditTime: 2020-06-19 01:46:35
+ * @LastEditTime: 2020-06-19 15:18:01
  * @FilePath: \WorldEngine\WorldEngine\unit\optional.h
  * @Description: Simulation the std::optional(C++17) in C++11.
  */
@@ -17,6 +17,11 @@
 class EBadOptionalAccess : public std::exception
 {
 };
+
+struct NullOptional
+{
+};
+constexpr NullOptional null_optional;
 
 template <class T>
 class Optional
@@ -69,7 +74,8 @@ public:
 
     template <class U = T,
               typename std::enable_if<
-                  std::is_constructible<T, U &&>::value &&
+                  !std::is_same<typename std::decay<U>::type, NullOptional>::value &&
+                      std::is_constructible<T, U &&>::value &&
                       !std::is_same<typename std::decay<U>::type, Optional<T>>::value,
                   int>::type = 0>
     constexpr Optional(U &&_value)
@@ -80,12 +86,33 @@ public:
 
     template <class U = T,
               typename std::enable_if<
-                  std::is_constructible<T, U &&>::value &&
+                  std::is_same<typename std::decay<U>::type, NullOptional>::value,
+                  int>::type = 0>
+    constexpr Optional(U &&)
+        : value{},
+          has_value{false}
+    {
+    }
+
+    template <class U = T,
+              typename std::enable_if<
+                  !std::is_same<typename std::decay<U>::type, NullOptional>::value &&
+                      std::is_constructible<T, U &&>::value &&
                       !std::is_same<typename std::decay<U>::type, Optional<T>>::value,
                   int>::type = 0>
     Optional<T> &operator=(U &&_value)
     {
         this->reset(_value);
+        return *this;
+    }
+
+    template <class U = T,
+              typename std::enable_if<
+                  std::is_same<typename std::decay<U>::type, NullOptional>::value,
+                  int>::type = 0>
+    Optional<T> &operator=(U &&)
+    {
+        this->reset();
         return *this;
     }
 
