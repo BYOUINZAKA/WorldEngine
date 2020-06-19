@@ -100,6 +100,16 @@ public:
     {
         return map.end();
     }
+
+    inline bool enable(SizeType i) const
+    {
+        return i >= 0 && i < getLength();
+    }
+
+    inline bool enable(SizeType i, SizeType j) const
+    {
+        return enable(i) && j >= 0 && j < getWidth();
+    }
 };
 
 #endif // __TOPOGRAPHY_TOPOGRAPHY_H

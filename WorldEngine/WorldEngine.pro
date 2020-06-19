@@ -30,9 +30,7 @@ SOURCES += \
     unit/dynamicoptions.cpp \
     test.cpp \
     topography/topographycontroller.cpp \
-    topography/topographyview.cpp \
-    unit/colors.cpp \
-    unit/optional.cpp
+    topography/topographyview.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,3 +48,5 @@ HEADERS += \
 FORMS += \
         mainwindow.ui \
     topography/topographyview.ui
+
+CONFIG += c++17

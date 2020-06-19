@@ -1,15 +1,11 @@
 #include "mainwindow.h"
 
-#include <functional>
-
 #include <QApplication>
 #include <QDebug>
 #include <QThread>
 
 #include "topography/topographycontroller.h"
 #include "topography/topographyview.h"
-#include "test.h"
-#include "unit/optional.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,21 +13,17 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    QThread thread;
+    QThread thread{&w};
 
-    Topography tp;
-    TopographyView tpv{&tp};
-    tpv.show();
+    Topography model;
+    TopographyView view{&model};
 
-    TopographyController tpc{&tp};
+    TopographyController controller{&model};
+    controller.moveToThread(&thread);
 
-    QObject::connect(&thread, &QThread::started, &tpc, &TopographyController::init);
-    QObject::connect(&thread, &QThread::finished, &tpc, &TopographyController::deleteLater);
-    QObject::connect(&w, &MainWindow::destroyed, [&thread](){
-        thread.quit();
-    });
+    QObject::connect(&thread, &QThread::started, &controller, &TopographyController::init);
+    QObject::connect(&thread, &QThread::finished, &controller, &TopographyController::deleteLater);
 
     thread.start();
-
     return a.exec();
 }

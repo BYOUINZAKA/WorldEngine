@@ -1,22 +1,24 @@
-#ifndef FUNCTIONAL_H
-#define FUNCTIONAL_H
+#ifndef __TOPOGRAPHY_FUNCTIONAL_H
+#define __TOPOGRAPHY_FUNCTIONAL_H
 
 #include <type_traits>
 
+// Pack some callback functions as strategies for initialization of random map.
 namespace Shape
 {
-    template <int N = 2, typename std::enable_if<(N > 0), int>::type = 0>
-    inline double normal()
+    template <int N = 1, int D = 2,
+              typename std::enable_if<N >= 1 && D >= 1, int>::type = 0>
+    constexpr double normal()
     {
-        return 1.0 / N;
+        return (double)N / (double)D;
     }
 
-    inline double mountain(double d, double m)
+    constexpr double mountain(double d, double m)
     {
         return (m - d) / m;
     }
 
-    inline double basin(double d, double m)
+    constexpr double basin(double d, double m)
     {
         return d / m;
     }
@@ -25,28 +27,28 @@ namespace Shape
 
 namespace Mapping
 {
-    inline double normal(double r)
+    constexpr double normal(double r)
     {
         return r;
     }
 
-    template <int N = 1, typename std::enable_if<N >= 0, int>::type = 0>
-    inline double extreme(double r)
+    template <int N = 1, typename std::enable_if<N >= 1, int>::type = 0>
+    constexpr double extreme(double r)
     {
         return std::tanh((r - 1) * N) + 0.5;
     }
 
-    template <int N, typename std::enable_if<(N < 0), int>::type = 0>
-    inline double extreme(double r)
+    template <int N, typename std::enable_if<N <= 0, int>::type = 0>
+    constexpr double extreme(double r)
     {
         return std::tanh((r - 1) / (-N)) + 0.5;
     }
 
-    inline double middle(double r)
+    constexpr double middle(double r)
     {
         return r;
     }
 
 } // namespace Mapping
 
-#endif // FUNCTIONAL_H
+#endif // __TOPOGRAPHY_FUNCTIONAL_H

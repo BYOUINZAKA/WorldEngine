@@ -1,3 +1,12 @@
+/*
+ * @Author: Hata
+ * @Date: 2020-06-18 19:09:39
+ * @LastEditors: Hata
+ * @LastEditTime: 2020-06-19 01:46:35
+ * @FilePath: \WorldEngine\WorldEngine\unit\optional.h
+ * @Description: Simulation the std::optional(C++17) in C++11.
+ */
+
 #ifndef OPTIONAL_H
 #define OPTIONAL_H
 
@@ -5,7 +14,9 @@
 #include <utility>
 #include <type_traits>
 
-class EBadOptionalAccess : public std::exception {};
+class EBadOptionalAccess : public std::exception
+{
+};
 
 template <class T>
 class Optional
