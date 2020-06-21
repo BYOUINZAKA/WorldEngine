@@ -31,7 +31,8 @@ SOURCES += \
     test.cpp \
     topography/topographycontroller.cpp \
     topography/topographyview.cpp \
-    topography/tools/topographymessage.cpp
+    topography/tools/topographymessage.cpp \
+    topography/algorithm/damphelper.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,15 +44,16 @@ HEADERS += \
     topography/topographycontroller.h \
     topography/topographyview.h \
     unit/colors.h \
-    topography/functional.h \
+    topography/algorithm/functional.h \
     unit/optional.h \
-    topography/tools/topographymessage.h
+    topography/tools/topographymessage.h \
+    topography/algorithm/damphelper.h
 
 FORMS += \
         mainwindow.ui \
     topography/topographyview.ui \
     topography/tools/topographymessage.ui
 
-CONFIG += c++17
+CONFIG += c++14
 
 VERSION = 20-6-19

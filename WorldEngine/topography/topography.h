@@ -15,6 +15,7 @@ public:
     using ValueType = Area;
     using MapType = QVector<ValueType>;
     using SizeType = MapType::size_type;
+    using Iterator = MapType::Iterator;
 
     explicit Topography(QObject *parent = nullptr);
     explicit Topography(SizeType _length,
@@ -120,6 +121,17 @@ public:
     {
         return accepted(static_cast<SizeType>(std::forward<T>(point).y()),
                         static_cast<SizeType>(std::forward<T>(point).x()));
+    }
+
+    template <
+        typename T,
+        typename U = typename std::remove_reference<T>::type,
+        typename X = decltype(&U::x),
+        typename Y = decltype(&U::y)>
+    constexpr const ValueType &at(T &&point) const&
+    {
+        return at(static_cast<SizeType>(std::forward<T>(point).y()),
+                  static_cast<SizeType>(std::forward<T>(point).x()));
     }
 };
 

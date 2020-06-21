@@ -16,6 +16,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:rgba(255, 255, 255, 50%);</string>
+  </property>
   <property name="frameShape">
    <enum>QFrame::Panel</enum>
   </property>
@@ -37,6 +40,12 @@
      <height>31</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="segmentStyle">
+    <enum>QLCDNumber::Flat</enum>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="temp_lcd">
    <property name="geometry">
@@ -47,6 +56,15 @@
      <height>31</height>
     </rect>
    </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <property name="segmentStyle">
+    <enum>QLCDNumber::Flat</enum>
+   </property>
   </widget>
   <widget class="QLCDNumber" name="damp_lcd">
    <property name="geometry">
@@ -56,6 +74,12 @@
      <width>81</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="smallDecimalPoint">
+    <bool>false</bool>
+   </property>
+   <property name="segmentStyle">
+    <enum>QLCDNumber::Flat</enum>
    </property>
   </widget>
   <widget class="QLabel" name="damp_lbl">
@@ -72,6 +96,9 @@
      <family>Consolas</family>
      <pointsize>10</pointsize>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgba(255, 255, 255, 0%);</string>
    </property>
    <property name="lineWidth">
     <number>1</number>
@@ -104,6 +131,9 @@
      <pointsize>10</pointsize>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgba(255, 255, 255, 0%);</string>
+   </property>
    <property name="lineWidth">
     <number>1</number>
    </property>
@@ -134,6 +164,9 @@
      <family>Consolas</family>
      <pointsize>10</pointsize>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgba(255, 255, 255, 0%);</string>
    </property>
    <property name="lineWidth">
     <number>1</number>
@@ -167,6 +200,9 @@
      <weight>50</weight>
      <bold>false</bold>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgba(255, 255, 255, 0%);</string>
    </property>
    <property name="lineWidth">
     <number>1</number>
@@ -204,6 +240,9 @@
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgba(255, 255, 255, 0%);</string>
+   </property>
    <property name="text">
     <string>M</string>
    </property>
@@ -231,6 +270,9 @@
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgba(255, 255, 255, 0%);</string>
+   </property>
    <property name="lineWidth">
     <number>1</number>
    </property>
@@ -241,6 +283,40 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>130</y>
+     <width>21</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Consolas</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgba(255, 255, 255, 0%);</string>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
+   </property>
+   <property name="text">
+    <string>L</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <zorder>label_3</zorder>
   <zorder>pos_lbl</zorder>
   <zorder>altitude_lbl</zorder>
   <zorder>temp_lbl</zorder>

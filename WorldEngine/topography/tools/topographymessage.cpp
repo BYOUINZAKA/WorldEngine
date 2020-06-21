@@ -9,7 +9,7 @@ TopographyMessage::TopographyMessage(QWidget *parent)
       ui(new Ui::TopographyMessage)
 {
     ui->setupUi(this);
-    setStyleSheet("background-color:white;");
+    // setStyleSheet("background-color:rgba(255, 255, 255, 50%);");
     hide();
 }
 
@@ -28,6 +28,5 @@ void TopographyMessage::setMessage(QMouseEvent *event, int x, int y, const Area 
     move(event->pos());
     show();
 
-    auto p = dynamic_cast<QWidget *>(parent());
-    p->setCursor(Qt::CrossCursor);
+    dynamic_cast<QWidget*>(parent())->setCursor(Qt::CrossCursor);
 }

@@ -5,37 +5,43 @@
 #include <cmath>
 #include <functional>
 #include <utility>
+#include <chrono>
 #include <type_traits>
 
 #include <QObject>
+#include <QTimer>
 
 #include "topography.h"
-#include "functional.h"
+#include "algorithm/functional.h"
 
 #ifdef QT_DEBUG
 #include <QDebug>
 #endif
-
 class TopographyController : public QObject
 {
     Q_OBJECT
 public:
-    explicit TopographyController(Topography *_model, QObject *parent = nullptr);
+    explicit TopographyController(Topography *_model, int msec = 1000, QObject *parent = nullptr);
 
 signals:
     void inited();
 
 public slots:
     void init();
+    void initTemp();
+    void initDamp();
+
+
     void meteor(int x, int y, double r, std::function<double(double)> mapping, double p);
     void buildRandomMap(std::function<double()>);
     void buildRandomMap(std::function<double(double, double)> = &Shape::mountain);
     void convolution(int level = 1);
-    void refreshStatus();
     float convolution(int x, int y, int level) const;
 
 private:
     Topography *model;
+    QTimer core_timer;
+
     std::mt19937 generator;
 
 public:
@@ -48,7 +54,7 @@ public:
         int n,
         std::pair<float, float> range = {10.0, 80.0},
         double p = 0.5,
-        std::function<double(double)> mapping = &Mapping::extreme<1>)
+        std::function<double(double)> mapping = &Mapping::extreme)
     {
         auto dis = 1.0 / range.first - 1.0 / range.second;
 

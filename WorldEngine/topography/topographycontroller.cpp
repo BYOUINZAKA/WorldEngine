@@ -7,13 +7,20 @@
 #include <QThread>
 
 #include "unit/options.h"
+#include "algorithm/damphelper.h"
 
-TopographyController::TopographyController(Topography *_model, QObject *parent)
+
+TopographyController::TopographyController(Topography *_model, int msec, QObject *parent)
     : QObject{parent},
-      model{_model == nullptr ? new Topography{this} : _model},
-      generator{static_cast<uint32_t>(std::chrono::system_clock::now().time_since_epoch().count())}
+      model{_model},
+      generator{static_cast<uint32_t>(std::chrono::system_clock::now().time_since_epoch().count())},
+      core_timer{_model}
 {
+    connect(&core_timer, &QTimer::timeout, model, &Topography::refreshed);
     connect(this, &TopographyController::inited, model, &Topography::refreshed);
+
+    core_timer.setInterval(msec);
+    core_timer.start();
 }
 
 void TopographyController::buildRandomMap(std::function<double(double, double)> strategy)
@@ -37,8 +44,6 @@ void TopographyController::buildRandomMap(std::function<double(double, double)> 
                 random(generator) * height_dis * strategy(std::sqrt(idis * idis + jdis * jdis), maxDis));
         }
     }
-
-    emit model->refreshed();
 }
 
 void TopographyController::buildRandomMap(std::function<double()> strategy)
@@ -55,8 +60,6 @@ void TopographyController::buildRandomMap(std::function<double()> strategy)
             it->setAltitude(random(generator) * strategy());
         }
     }
-
-    emit model->refreshed();
 }
 
 void TopographyController::meteor(int x, int y, double r, std::function<double(double)> mapping, double p)
@@ -83,8 +86,6 @@ void TopographyController::meteor(int x, int y, double r, std::function<double(d
             }
         }
     }
-
-    emit model->refreshed();
 }
 
 float TopographyController::convolution(int x, int y, int level) const
@@ -100,8 +101,6 @@ float TopographyController::convolution(int x, int y, int level) const
             sum += model->accepted(i, j) ? model->at(i, j).altitude : 0.0;
         }
     }
-
-    emit model->refreshed();
     return sum / std::pow(2 * level + 1, 2);
 }
 
@@ -113,21 +112,38 @@ void TopographyController::convolution(int level)
             model->at(y, x).altitude = convolution(x, y, level);
 }
 
-void TopographyController::refreshStatus()
+void TopographyController::initTemp()
 {
-    for(auto it = model->begin(); it != model->end(); ++it)
+    for (auto it = model->begin(); it != model->end(); ++it)
     {
         it->defaultTemp();
     }
 }
 
+void TopographyController::initDamp()
+{
+    auto is_water = static_cast<float>(Options::IsWater);
+    for (auto it = model->begin(); it != model->end(); ++it)
+    {
+        if (it->isDeepWater())
+            it->damp = is_water;
+    }
+#ifdef QT_DEBUG
+    DampHelper damp_helper{model, 16, 20.0f};
+#else
+    DampHelper damp_helper{model, 32, 20.0f};
+#endif
+    damp_helper.solve(5);
+}
+
 void TopographyController::init()
 {
-    buildRandomMap(&Shape::mountain);
-    meteors(25, {80, 200}, 0.5, &Mapping::extreme<2>);
-    multiConvolution(1, 2);
-    meteors(500, {10, 80}, 0.5, &Mapping::normal);
+    buildRandomMap(&Shape::basin);
+    meteors(20, {80, 200}, 0.5, &Mapping::extreme<2>);
     multiConvolution(1, 2, 3);
-    refreshStatus();
+    meteors(500, {5, 100}, 0.8, &Mapping::extreme);
+    multiConvolution(1, 2, 3);
+    initTemp();
+    initDamp();
     emit inited();
 }

@@ -38,6 +38,18 @@ struct Area
         altitude = GET_VALID_VALUE(Altitude, _altitude);
         defaultTemp();
     }
+
+    inline float height() const
+    {
+        return altitude - float(Options::MinAltitude);
+    }
+
+    inline bool isDeepWater() const
+    {
+        return altitude < float(Options::Horizontal);
+    }
 };
+
+
 
 #endif

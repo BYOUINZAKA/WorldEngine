@@ -10,15 +10,16 @@
 
 enum class Options
 {
-    MaxAltitude = 1000,
-    MinAltitude = -300,
+    MaxAltitude = 800,
+    MinAltitude = -50,
     MaxTemp = 45,
     MinTemp = -30,
     MaxDamp = 100,
     MinDamp = 0,
     Horizontal = 0,
     BaseTemp = 20,
-    WaterTemp = 10
+    WaterTemp = 10,
+    IsWater = 1000
 };
 
 #endif

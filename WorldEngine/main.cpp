@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QThread>
+#include <QTimer>
 
 #include "topography/topographycontroller.h"
 #include "topography/topographyview.h"
@@ -17,7 +18,7 @@ int main(int argc, char *argv[])
     QThread thread{&w};
 
     Topography model;
-    TopographyView view{&model, 3};
+    TopographyView view{&model, 1};
 
     TopographyController controller{&model};
     controller.moveToThread(&thread);
@@ -26,5 +27,6 @@ int main(int argc, char *argv[])
     QObject::connect(&thread, &QThread::finished, &controller, &TopographyController::deleteLater);
 
     thread.start();
+
     return a.exec();
 }

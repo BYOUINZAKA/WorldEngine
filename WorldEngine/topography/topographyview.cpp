@@ -18,16 +18,16 @@
 TopographyView::TopographyView(Topography *model, int enlarge, QWidget *parent)
     : QWidget(parent),
       ui(new Ui::TopographyView),
+      area_message_box(new TopographyMessage(this)),
       model{model},
-      enlarge{enlarge > kMaxEnlarge ? kMaxEnlarge : (enlarge < kMinEnlarge ? kMinEnlarge : enlarge)},
-      area_message_box(new TopographyMessage(this))
+      enlarge{std::max(int(kMinEnlarge), std::min(enlarge, int(kMaxEnlarge)))}
 {
     ui->setupUi(this);
     show();
     setFixedSize(this->width(), this->height());
 
-    base_step = QPointF{this->width() / (double)model->getWidth(), this->height() / (double)model->getLength()};
-    base_translator = QTransform{base_step.x(), 0, 0, base_step.y(), 0, 0};
+    base_translator = QTransform{this->width() / (double)model->getWidth(), 0, 0,
+                                 this->height() / (double)model->getLength(), 0, 0};
     translator = setTranslatorByMulti(base_translator, enlarge, 0, 0, enlarge, 0, 0);
     center.setX(model->getWidth() / 2.0);
     center.setY(model->getLength() / 2.0);
@@ -86,7 +86,8 @@ void TopographyView::mousePressEvent(QMouseEvent *event)
     else if (event->button() == Qt::RightButton)
     {
         QPoint dpos = QPoint{width() / 2.0, height() / 2.0} - event->pos();
-        QPointF midpos{dpos.x() / double(enlarge) / base_step.x(), dpos.y() / double(enlarge) / base_step.y()};
+        QPointF midpos{dpos.x() / double(enlarge) / base_translator.m11(),
+                       dpos.y() / double(enlarge) / base_translator.m22()};
         QPoint pos{center.x() - midpos.x(), center.y() - midpos.y()};
 
         if (model->accepted(pos))
@@ -98,7 +99,9 @@ void TopographyView::mousePressEvent(QMouseEvent *event)
 
 void TopographyView::mouseMoveEvent(QMouseEvent *event)
 {
-    if (active_pos.hasValue() && event->globalPos() != *active_pos)
+    if ((event->buttons() & Qt::LeftButton) &&
+        active_pos.hasValue() &&
+        event->globalPos() != *active_pos)
     {
         center += (*active_pos - event->globalPos()) / (enlarge * enlarge);
         QWidget::update();
@@ -122,7 +125,7 @@ void TopographyView::wheelEvent(QWheelEvent *event)
 {
     if (!area_message_box->close())
         area_message_box->hide();
-    int new_value = enlarge + event->delta() / 120.0;
+    int32_t new_value = enlarge + event->delta() / 120.0;
     if (new_value <= kMaxEnlarge && new_value >= kMinEnlarge)
     {
         enlarge = new_value;

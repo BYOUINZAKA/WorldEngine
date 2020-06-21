@@ -1,11 +1,9 @@
-/*
- * @Author: Hata
- * @Date: 2020-06-18 19:09:39
- * @LastEditors: Hata
- * @LastEditTime: 2020-06-19 15:18:01
- * @FilePath: \WorldEngine\WorldEngine\unit\optional.h
- * @Description: Simulation the std::optional(C++17) in C++11.
- */
+/**
+* @ProjectName   WorldEngine
+* @Date          2020-06-20
+* @FilaeName     %{CurrentFile:Name}
+* @Description   Simulation the std::optional(C++17) in C++11.
+*/
 
 #ifndef OPTIONAL_H
 #define OPTIONAL_H

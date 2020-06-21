@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-// Pack some callback functions as strategies for initialization of random map.
+// There're some callback functions as strategies for initialization of random map.
 namespace Shape
 {
     template <int N = 1, int D = 2,
@@ -38,10 +38,10 @@ namespace Mapping
         return std::tanh((r - 1) * N) + 0.5;
     }
 
-    template <int N, typename std::enable_if<N <= 0, int>::type = 0>
-    constexpr double extreme(double r)
+    template <int N = 1, typename std::enable_if<N >= 0, int>::type = 0>
+    constexpr double unextreme(double r)
     {
-        return std::tanh((r - 1) / (-N)) + 0.5;
+        return std::tanh((r - 1) / N) + 0.5;
     }
 
     constexpr double middle(double r)
@@ -50,5 +50,13 @@ namespace Mapping
     }
 
 } // namespace Mapping
+
+namespace Decay {
+    template <int N = 20, typename std::enable_if<N >= 1, int>::type = 0>
+    constexpr double linear(int step)
+    {
+        return step > 20 ? 0 : 1.0 - step / double(N);
+    }
+}
 
 #endif // __TOPOGRAPHY_FUNCTIONAL_H
