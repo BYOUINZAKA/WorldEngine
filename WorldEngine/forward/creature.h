@@ -1,4 +1,13 @@
-#ifndef FORWARD_H
-#define FORWARD_H
+#ifndef __FORWARD_CREATURE_H
+#define __FORWARD_CREATURE_H
 
-#endif // FORWARD_H
+namespace Creature {
+class Animal;
+class Plant;
+
+class IMoveable;
+class IRunable;
+
+} // namespace Creature
+
+#endif // __FORWARD_CREATURE_H

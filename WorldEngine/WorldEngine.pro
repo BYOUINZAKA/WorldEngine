@@ -28,7 +28,6 @@ SOURCES += \
         mainwindow.cpp \
     topography/topography.cpp \
     unit/dynamicoptions.cpp \
-    test.cpp \
     topography/topographycontroller.cpp \
     topography/topographyview.cpp \
     topography/tools/topographymessage.cpp \
@@ -40,14 +39,15 @@ HEADERS += \
     unit/options.h \
     topography/topography.h \
     unit/dynamicoptions.h \
-    test.h \
     topography/topographycontroller.h \
     topography/topographyview.h \
     unit/colors.h \
     topography/algorithm/functional.h \
     unit/optional.h \
     topography/tools/topographymessage.h \
-    topography/algorithm/damphelper.h
+    topography/algorithm/damphelper.h \
+    interface/irunablue.h \
+    forward/creature.h
 
 FORMS += \
         mainwindow.ui \

@@ -9,18 +9,18 @@
 #include "topography/topographyview.h"
 #include "unit/optional.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
 
-    QThread thread{&w};
+    QThread thread { &w };
 
     Topography model;
-    TopographyView view{&model, 1};
+    TopographyView view { &model, 1 };
 
-    TopographyController controller{&model};
+    TopographyController controller { &model };
     controller.moveToThread(&thread);
 
     QObject::connect(&thread, &QThread::started, &controller, &TopographyController::init);

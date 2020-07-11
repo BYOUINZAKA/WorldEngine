@@ -1,6 +1,7 @@
 #include "dynamicoptions.h"
 
-DynamicOptions::DynamicOptions(QObject *parent) : QObject(parent)
+DynamicOptions::DynamicOptions(QObject* parent)
+    : QObject(parent)
 {
 }
 

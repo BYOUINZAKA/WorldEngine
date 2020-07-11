@@ -1,84 +1,36 @@
 #include "damphelper.h"
 
-#include <utility>
 #include <cmath>
+#include <utility>
 
 #include <QPoint>
 #include <QPointF>
 #ifdef QT_DEBUG
-#   include <QDebug>
+#include <QDebug>
 #endif
 
-DampHelper::DampHelper(Topography *_model, int _sample_count, float _step, std::function<double(int)> _decay)
-    : model{_model},
-      sample_count(_sample_count),
-      step{_step},
-      decay{_decay},
-      max_step{0}
+DampHelper::DampHelper(Topography* _model, int _sample_count, float _step, int _max_step)
+    : model { _model }
+    , sample_count(_sample_count)
+    , step { _step }
+    , max_step { _max_step }
+    , dd { (float)(TwicePI / _sample_count) }
 {
-    int limit = std::sqrt(model->getLength() * model->getLength() + model->getWidth() * model->getWidth()) / sample_count;
-    assert(decay(0) <= 1.0 && decay(limit) <= 1e-6);
-    for(; decay(max_step) > 1e-6 && max_step <= limit; ++max_step);
 }
 
 int DampHelper::stepUp(int x, int y, float dir)
 {
     int count = 0;
-    auto &&dp = QPointF{std::cos(dir), std::sin(dir)} * step;
-    for(auto &&real = QPointF{x, y}; count <= max_step; real += dp){
-        if(!model->accepted(real)){
+    auto&& dp = QPointF { std::cos(dir), std::sin(dir) } * step;
+    for (auto&& real = QPointF { x, y }; count <= max_step; real += dp, ++count) {
+        if (!model->accepted(real)) {
             return max_step;
         }
-        if(model->at(real).isDeepWater()){
-            return count;
-        }
-        ++count;
-    }
-}
-
-float DampHelper::spread(int x, int y)
-{
-    int count = 0;
-    float dd = TwicePI / sample_count;
-    float sum = 0.0f;
-    for(float dir = 0.0f; dir < TwicePI; dir += dd, ++count){
-        sum += decay(stepUp(x, y, dir)) * float(Options::IsWater);
-    }
-    return sum / count;
-}
-
-void DampHelper::solve(int level)
-{
-    auto width = model->getWidth(), length = model->getLength();
-    int len = 2 * level + 1;
-    for(int y = level; y < length - level; y+=len)
-    {
-        for(int x = level; x < width - level; x+=len)
-        {
-            if(!model->at(y, x).isDeepWater())
-            {
-                // it->damp = spread(x, y);
-                setByWindow(x, y, spread(x, y), level);
-            }
+        if (model->at(real).isDeepWater()) {
+            break;
         }
     }
-#ifdef QT_DEBUG
-    qDebug("end");
-#endif
-}
-
-void DampHelper::setByWindow(int x, int y, float value, int level)
-{
-    int i_begin = y - level, i_end = y + level + 1;
-    int j_begin = x - level, j_end = x + level + 1;
-    for(int i = i_begin; i < i_end; ++i)
-    {
-        for(int j = j_begin; j < j_end; ++j)
-        {
-            if(!model->at(y, x).isDeepWater())
-            model->at(i, j).damp = value;
-        }
-    }
+    return count;
 }
 
 /*
