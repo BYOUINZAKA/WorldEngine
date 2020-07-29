@@ -26,4 +26,4 @@ public:
     enum { kMaxDisplayTime = 5000 };
 };
 
-#endif // TOPOGRAPHYMESSAGE_H
+#endif  // TOPOGRAPHYMESSAGE_H

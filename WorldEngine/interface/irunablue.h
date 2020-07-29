@@ -9,4 +9,4 @@ public:
     virtual void run() = 0;
 };
 
-#endif // IRUNABLUE_H
+#endif  // IRUNABLUE_H

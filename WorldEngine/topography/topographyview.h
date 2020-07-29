@@ -1,6 +1,5 @@
-#ifndef TOPOGRAPHYVIEW_H
-#define TOPOGRAPHYVIEW_H
-
+#ifndef __TOPOGRAPHY_TOPOGRAPHYVIEW_H
+#define __TOPOGRAPHY_TOPOGRAPHYVIEW_H
 #include <functional>
 
 #include <QPoint>
@@ -24,8 +23,8 @@ public:
 
 public:
     explicit TopographyView(Topography* model, int enlarge = 1, QWidget* parent = nullptr);
-    explicit TopographyView(
-        const TopographyController& tpc, int enlarge = 1, QWidget* parent = nullptr);
+    explicit TopographyView(const TopographyController& tpc, int enlarge = 1,
+                            QWidget* parent = nullptr);
     ~TopographyView();
 
 signals:
@@ -57,14 +56,13 @@ private:
     // presses the left mouse button.
     Optional<QPoint> active_pos;
 
-    template <typename... Enable>
-    constexpr typename std::enable_if<(sizeof...(Enable) == 6) || (sizeof...(Enable) == 9),
-        QTransform>::type&&
-    setTranslatorByMulti(const QTransform& base, Enable&&... enables)
-    {
-        return std::move(
-            base * QTransform { static_cast<qreal>(std::forward<Enable>(enables))... });
+private:
+    template <typename... Args>
+    constexpr
+        typename std::enable_if<(sizeof...(Args) == 6) || (sizeof...(Args) == 9), QTransform>::type
+        setTranslatorByMulti(const QTransform& base, Args&&... args) {
+        return base * QTransform{static_cast<qreal>(std::forward<Args>(args))...};
     }
 };
 
-#endif // TOPOGRAPHYVIEW_H
+#endif  // __TOPOGRAPHY_TOPOGRAPHYVIEW_H

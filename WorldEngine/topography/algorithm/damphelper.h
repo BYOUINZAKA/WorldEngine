@@ -1,18 +1,17 @@
 #ifndef DAMPHELPER_H
 #define DAMPHELPER_H
 
+#include <QVector>
 #include <functional>
 #include <tuple>
-
-#include <QVector>
 
 #include "functional.h"
 #include "topography/topography.h"
 
 class DampHelper {
 public:
-    constexpr static const double TwicePI
-        = 3.14159265358979323846264338327950288419716939937510582097494 * 2.0;
+    constexpr static const double TwicePI =
+        3.14159265358979323846264338327950288419716939937510582097494 * 2.0;
 
 private:
     Topography* model;
@@ -26,14 +25,13 @@ public:
 
     int stepUp(int x, int y, float dir);
 
-    template <class F = double (*)(double, double)> void solve(F&& decay = &Decay::solid_linear)
-    {
+    template <class F = double (*)(double, double)>
+    void solve(F&& decay = &Decay::solid_linear) {
         auto width = model->getWidth(), length = model->getLength();
         auto it = model->begin();
         for (int y = 0; y < length; ++y) {
             for (int x = 0; x < width; ++x, ++it) {
-                if (!it->isDeepWater())
-                    it->damp = spread(x, y, std::forward<F>(decay));
+                if (!it->isDeepWater()) it->damp = spread(x, y, std::forward<F>(decay));
             }
         }
 #ifdef QT_DEBUG
@@ -41,8 +39,8 @@ public:
 #endif
     }
 
-    template <class F> float spread(int x, int y, F&& decay)
-    {
+    template <class F>
+    float spread(int x, int y, F&& decay) {
         int count = 0;
         float sum = 0.0f;
         auto height = model->at(y, x).altitude;
@@ -53,4 +51,4 @@ public:
     }
 };
 
-#endif // DAMPHELPER_H
+#endif  // DAMPHELPER_H

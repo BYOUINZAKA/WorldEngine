@@ -8,6 +8,6 @@ class Plant;
 class IMoveable;
 class IRunable;
 
-} // namespace Creature
+}  // namespace Creature
 
-#endif // __FORWARD_CREATURE_H
+#endif  // __FORWARD_CREATURE_H

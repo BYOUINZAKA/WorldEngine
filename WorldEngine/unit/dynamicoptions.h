@@ -14,4 +14,4 @@ signals:
 public slots:
 };
 
-#endif // __UNIT_DYNAMICOPTIONS_H
+#endif  // __UNIT_DYNAMICOPTIONS_H

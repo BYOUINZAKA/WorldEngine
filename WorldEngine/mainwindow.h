@@ -1,7 +1,10 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef __MAINWINDOW_H
+#define __MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QThread>
+
+#include "topography/topographyview.h"
 
 namespace Ui {
 class MainWindow;
@@ -14,8 +17,17 @@ public:
     explicit MainWindow(QWidget* parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_button_buildmap_clicked();
+
 private:
     Ui::MainWindow* ui;
+
+    QThread map_thread;
+
+    Topography tp_model;
+    TopographyView tp_view;
+    TopographyController tp_con;
 };
 
-#endif // MAINWINDOW_H
+#endif  // __MAINWINDOW_H
