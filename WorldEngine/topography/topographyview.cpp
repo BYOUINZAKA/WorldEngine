@@ -84,10 +84,11 @@ void TopographyView::mousePressEvent(QMouseEvent* event) {
         QPoint dpos = QPoint{width() / 2.0, height() / 2.0} - event->pos();
 
         QPointF mid_pos{dpos.x() / double(enlarge) / base_translator.m11(),
-                       dpos.y() / double(enlarge) / base_translator.m22()};
+                        dpos.y() / double(enlarge) / base_translator.m22()};
 
         QPoint pos{center.x() - mid_pos.x(), center.y() - mid_pos.y()};
 
+        // 把当前点的土壤信息传递给消息框
         if (model->accepted(pos)) {
             emit sendAreaMessage(event, pos.x(), pos.y(), model->at(pos.y(), pos.x()));
         }
@@ -105,7 +106,7 @@ void TopographyView::mouseMoveEvent(QMouseEvent* event) {
 
 void TopographyView::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton && bool(active_pos)) {
-        // 松开左键时，等待一段时间再变回原本的箭头
+        // 松开左键时，等待短时间再变回原本的箭头
         active_pos = null_optional;
         this->setCursor(Qt::OpenHandCursor);
         QTimer::singleShot(10, [this] { this->setCursor(Qt::ArrowCursor); });
@@ -118,7 +119,7 @@ void TopographyView::wheelEvent(QWheelEvent* event) {
 
     const int32_t new_value = enlarge + event->delta() / 120.0;
 
-    if (new_value <= kMaxEnlarge && new_value >= kMinEnlarge) {
+    if (new_value >= kMinEnlarge && new_value <= kMaxEnlarge) {
         enlarge = new_value;
         translator = setTranslatorByMulti(base_translator, enlarge, 0, 0, enlarge, 0, 0);
         QWidget::update();

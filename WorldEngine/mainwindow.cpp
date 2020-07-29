@@ -8,12 +8,11 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow{parent},
       ui{new Ui::MainWindow},
-      map_thread{this} {
+      map_thread{this},
+      tp_model{new Topography{this}},
+      tp_view{new TopographyView{tp_model}},
+      tp_con{new TopographyController{tp_model}} {
     ui->setupUi(this);
-
-    tp_model = new Topography{this};
-    tp_view = new TopographyView(tp_model);
-    tp_con = new TopographyController(tp_model);
 
     tp_con->moveToThread(&map_thread);
 
@@ -27,7 +26,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::on_button_buildmap_clicked() {
-    if(!map_thread.isRunning()){
+    if (!map_thread.isRunning()) {
         map_thread.start();
     }
     tp_view->show();

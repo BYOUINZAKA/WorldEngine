@@ -1,10 +1,11 @@
 #include "topographycontroller.h"
 
-#include <QThread>
 #include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <iterator>
+
+#include <QThread>
 
 #include "algorithm/damphelper.h"
 #include "algorithm/functional.h"

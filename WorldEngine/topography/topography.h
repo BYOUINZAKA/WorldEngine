@@ -37,7 +37,7 @@ private:
 
 public:
     // 可接受具有成员函数x()和y()的向量类型（如QPoint和QPointF）
-    // @Todo: 应改为由 std::declval 调用检测的形式
+    // @Todo: 应改为由 std::declval 调用检测的形式，泛用性更好
     template <typename T, typename U = typename std::remove_reference<T>::type,
               typename X = decltype(&U::x), typename Y = decltype(&U::y)>
     constexpr bool accepted(T&& point) const {

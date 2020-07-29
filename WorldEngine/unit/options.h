@@ -2,9 +2,9 @@
  * @Author: Hata
  * @Date: 2020-06-13 16:29:44
  * @LastEditors: Hata
- * @LastEditTime: 2020-07-29 10:04:16
+ * @LastEditTime: 2020-07-29 15:39:43
  * @FilePath: \WorldEngine\WorldEngine\unit\options.h
- * @Description: Something static config.
+ * @Description: 包含一部分的静态参数
  */ 
 #ifndef __UNIT_OPTIONS_H
 #define __UNIT_OPTIONS_H
@@ -16,6 +16,7 @@
                                                            : (val)))
 
 enum class Options {
+    // @Todo: 海拔范围应改为动态的参数
     MaxAltitude = 800,
     MinAltitude = -100,
     MaxTemp = 45,
