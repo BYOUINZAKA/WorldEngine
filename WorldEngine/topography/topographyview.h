@@ -1,15 +1,18 @@
 #ifndef __TOPOGRAPHY_TOPOGRAPHYVIEW_H
 #define __TOPOGRAPHY_TOPOGRAPHYVIEW_H
+
 #include <functional>
 
 #include <QPoint>
 #include <QTransform>
 #include <QWidget>
 
-#include "tools/topographymessage.h"
-#include "topography.h"
-#include "topographycontroller.h"
 #include "unit/optional.h"
+#include "unit/area.h"
+
+class Topography;
+class TopographyMessage;
+class TopographyController;
 
 namespace Ui {
 class TopographyView;
@@ -23,12 +26,13 @@ public:
 
 public:
     explicit TopographyView(Topography* model, int enlarge = 1, QWidget* parent = nullptr);
-    explicit TopographyView(const TopographyController& tpc, int enlarge = 1,
+    explicit TopographyView(TopographyController* tpc, int enlarge = 1,
                             QWidget* parent = nullptr);
     ~TopographyView();
 
 signals:
     void imageMoved();
+    // The interactive interface with the TopographyMessage.
     void sendAreaMessage(QMouseEvent* event, int x, int y, const Area& msg);
 
 protected:
@@ -52,8 +56,7 @@ private:
     // This is a vector that converts real matrix to map matrix.
     QTransform base_translator;
 
-    // Packaging an optional pos, It will save a global pos when the user
-    // presses the left mouse button.
+    // Packaging an optional pos, It will save a global pos when the user presses the left mouse button.
     Optional<QPoint> active_pos;
 
 private:

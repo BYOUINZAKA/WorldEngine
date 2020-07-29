@@ -22,6 +22,7 @@ class TopographyController : public QObject {
     Q_OBJECT
 public:
     explicit TopographyController(Topography* _model, int msec = 1000, QObject* parent = nullptr);
+    ~TopographyController() = default;
 
 signals:
     void inited();
@@ -64,6 +65,7 @@ public:
         }
     }
 
+    // 方便的卷积接口，可以进行多次不同窗口大小的卷积
     template <typename T, typename... Args>
     typename std::enable_if<std::is_integral<T>::value>::type multiConvolution(T&& arg,
                                                                                Args&&... args) {

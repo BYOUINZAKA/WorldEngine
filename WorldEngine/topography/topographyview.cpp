@@ -14,7 +14,10 @@
 #include <QTimer>
 #include <QWheelEvent>
 
+#include "topography.h"
 #include "unit/colors.h"
+#include "tools/topographymessage.h"
+#include "topographycontroller.h"
 
 using namespace std;
 
@@ -39,8 +42,8 @@ TopographyView::TopographyView(Topography* model, int enlarge, QWidget* parent)
             &TopographyMessage::setMessage);
 }
 
-TopographyView::TopographyView(const TopographyController& tpc, int enlarge, QWidget* parent)
-    : TopographyView{tpc.getModel(), enlarge, parent} {}
+TopographyView::TopographyView(TopographyController* tpc, int enlarge, QWidget* parent)
+    : TopographyView{tpc->getModel(), enlarge, parent} {}
 
 TopographyView::~TopographyView() { delete ui; }
 
@@ -70,17 +73,20 @@ void TopographyView::paintEvent(QPaintEvent* event) {
 
 void TopographyView::mousePressEvent(QMouseEvent* event) {
     if (!area_message_box->close()) area_message_box->hide();
+
     if (event->button() == Qt::LeftButton) {
         this->setCursor(Qt::ClosedHandCursor);
         active_pos = event->globalPos();
+
         QWidget::update();
+
     } else if (event->button() == Qt::RightButton) {
         QPoint dpos = QPoint{width() / 2.0, height() / 2.0} - event->pos();
 
-        QPointF midpos{dpos.x() / double(enlarge) / base_translator.m11(),
+        QPointF mid_pos{dpos.x() / double(enlarge) / base_translator.m11(),
                        dpos.y() / double(enlarge) / base_translator.m22()};
 
-        QPoint pos{center.x() - midpos.x(), center.y() - midpos.y()};
+        QPoint pos{center.x() - mid_pos.x(), center.y() - mid_pos.y()};
 
         if (model->accepted(pos)) {
             emit sendAreaMessage(event, pos.x(), pos.y(), model->at(pos.y(), pos.x()));
@@ -89,6 +95,7 @@ void TopographyView::mousePressEvent(QMouseEvent* event) {
 }
 
 void TopographyView::mouseMoveEvent(QMouseEvent* event) {
+    // 只有在按下左键时才会触发移动事件
     if ((event->buttons() & Qt::LeftButton) && active_pos.hasValue() &&
         event->globalPos() != *active_pos) {
         center += (*active_pos - event->globalPos()) / (enlarge * enlarge);
@@ -98,6 +105,7 @@ void TopographyView::mouseMoveEvent(QMouseEvent* event) {
 
 void TopographyView::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton && bool(active_pos)) {
+        // 松开左键时，等待一段时间再变回原本的箭头
         active_pos = null_optional;
         this->setCursor(Qt::OpenHandCursor);
         QTimer::singleShot(10, [this] { this->setCursor(Qt::ArrowCursor); });
@@ -107,11 +115,14 @@ void TopographyView::mouseReleaseEvent(QMouseEvent* event) {
 
 void TopographyView::wheelEvent(QWheelEvent* event) {
     if (!area_message_box->close()) area_message_box->hide();
-    int32_t new_value = enlarge + event->delta() / 120.0;
+
+    const int32_t new_value = enlarge + event->delta() / 120.0;
+
     if (new_value <= kMaxEnlarge && new_value >= kMinEnlarge) {
         enlarge = new_value;
         translator = setTranslatorByMulti(base_translator, enlarge, 0, 0, enlarge, 0, 0);
-        QWidget::repaint();
+        QWidget::update();
     }
+
     event->accept();
 }

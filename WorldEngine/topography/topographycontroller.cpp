@@ -8,6 +8,7 @@
 
 #include "algorithm/damphelper.h"
 #include "algorithm/functional.h"
+#include "topography.h"
 #include "unit/options.h"
 
 using namespace std;

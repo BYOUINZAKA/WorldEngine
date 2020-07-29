@@ -9,6 +9,8 @@
 
 #include "unit/dynamicoptions.h"
 
+using namespace std;
+
 Topography::Topography(SizeType _length, SizeType _width, QObject* parent)
     : QObject(parent), length(_length), width(_width), map(_length * _width) {
     emit refreshed();
@@ -19,6 +21,6 @@ Topography::Topography(QObject* parent)
 
 float Topography::avgHeight() const {
     double sum = 0.0;
-    std::for_each(map.cbegin(), map.cend(), [&sum](const Area& area) { sum += area.altitude; });
+    for(auto&& e : map) sum += e.altitude;
     return sum / getRealSize();
 }

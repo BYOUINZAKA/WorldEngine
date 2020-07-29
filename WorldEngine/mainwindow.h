@@ -4,11 +4,13 @@
 #include <QMainWindow>
 #include <QThread>
 
-#include "topography/topographyview.h"
-
 namespace Ui {
 class MainWindow;
 }
+
+class Topography;
+class TopographyView;
+class TopographyController;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -23,11 +25,12 @@ private slots:
 private:
     Ui::MainWindow* ui;
 
+    // 地图逻辑线程，与主程序的生命周期一致，不会被销毁
     QThread map_thread;
 
-    Topography tp_model;
-    TopographyView tp_view;
-    TopographyController tp_con;
+    Topography* tp_model;
+    TopographyView* tp_view;
+    TopographyController* tp_con;
 };
 
 #endif  // __MAINWINDOW_H

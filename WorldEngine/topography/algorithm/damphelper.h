@@ -1,9 +1,19 @@
-#ifndef DAMPHELPER_H
-#define DAMPHELPER_H
+/*
+ * @Author: Hata
+ * @Date: 2020-06-19 16:38:30
+ * @LastEditors: Hata
+ * @LastEditTime: 2020-07-29 15:28:13
+ * @FilePath: \WorldEngine\WorldEngine\topography\algorithm\damphelper.h
+ * @Description: 基于蒙地卡罗算法的土壤湿度计算辅助类
+ */
+
+#ifndef __TOPOGRAPHY_ALGORITHM_DAMPHELPER_H
+#define __TOPOGRAPHY_ALGORITHM_DAMPHELPER_H
 
 #include <QVector>
 #include <functional>
 #include <tuple>
+#include <cmath>
 
 #include "functional.h"
 #include "topography/topography.h"
@@ -16,8 +26,8 @@ public:
 private:
     Topography* model;
     int sample_count;
-    float step;
     int max_step;
+    float step;
     float dd;
 
 public:
@@ -27,28 +37,30 @@ public:
 
     template <class F = double (*)(double, double)>
     void solve(F&& decay = &Decay::solid_linear) {
-        auto width = model->getWidth(), length = model->getLength();
+        const int width = model->getWidth(), length = model->getLength();
+
         auto it = model->begin();
+
         for (int y = 0; y < length; ++y) {
             for (int x = 0; x < width; ++x, ++it) {
                 if (!it->isDeepWater()) it->damp = spread(x, y, std::forward<F>(decay));
             }
         }
-#ifdef QT_DEBUG
-        qDebug("solve end.");
-#endif
     }
 
     template <class F>
     float spread(int x, int y, F&& decay) {
         int count = 0;
         float sum = 0.0f;
-        auto height = model->at(y, x).altitude;
+
+        cosnt auto height = model->at(y, x).altitude;
+
         for (float dir = 0.0f; dir < TwicePI; dir += dd, ++count) {
             sum += decay(stepUp(x, y, dir) * step, height) * float(Options::IsWater);
         }
+
         return sum / count;
     }
 };
 
-#endif  // DAMPHELPER_H
+#endif  // __TOPOGRAPHY_ALGORITHM_DAMPHELPER_H

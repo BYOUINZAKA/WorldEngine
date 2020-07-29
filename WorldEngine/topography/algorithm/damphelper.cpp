@@ -16,15 +16,16 @@ DampHelper::DampHelper(Topography* _model, int _sample_count, float _step, int _
       dd{(float)(TwicePI / _sample_count)} {}
 
 int DampHelper::stepUp(int x, int y, float dir) {
+    const auto&& vec = QPointF{std::cos(dir), std::sin(dir)} * step;
+
     int count = 0;
-    auto&& dp = QPointF{std::cos(dir), std::sin(dir)} * step;
-    for (auto&& real = QPointF{x, y}; count <= max_step; real += dp, ++count) {
-        if (!model->accepted(real)) {
-            return max_step;
-        }
-        if (model->at(real).isDeepWater()) {
-            break;
-        }
+
+    for (auto&& real = QPointF{x, y}; count <= max_step; real += vec, ++count) {
+        // 超出地图边界，则距离水源无穷远
+        if (!model->accepted(real)) return max_step;
+        // 找到水源，得到步数
+        if (model->at(real).isDeepWater()) break;
     }
+
     return count;
 }

@@ -1,25 +1,34 @@
 #include "mainwindow.h"
 
+#include "topography/topographyview.h"
+#include "topography/topography.h"
+#include "topography/topographycontroller.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow{parent},
       ui{new Ui::MainWindow},
-      map_thread{this},
-      tp_model{},
-      tp_view{&tp_model},
-      tp_con{&tp_model} {
+      map_thread{this} {
     ui->setupUi(this);
 
-    tp_con.moveToThread(&map_thread);
+    tp_model = new Topography{this};
+    tp_view = new TopographyView(tp_model);
+    tp_con = new TopographyController(tp_model);
 
-    QObject::connect(&map_thread, &QThread::started, &tp_con, &TopographyController::init);
-    QObject::connect(&map_thread, &QThread::finished, &tp_con, &TopographyController::deleteLater);
+    tp_con->moveToThread(&map_thread);
+
+    connect(&map_thread, &QThread::started, tp_con, &TopographyController::init);
+    connect(&map_thread, &QThread::finished, tp_con, &TopographyController::deleteLater);
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+    delete ui;
+    delete tp_view;
+}
 
 void MainWindow::on_button_buildmap_clicked() {
-    map_thread.start();
-    tp_view.show();
+    if(!map_thread.isRunning()){
+        map_thread.start();
+    }
+    tp_view->show();
 }

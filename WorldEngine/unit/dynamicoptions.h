@@ -9,9 +9,11 @@ public:
     explicit DynamicOptions(QObject* parent = nullptr);
     static int32_t Length;
     static int32_t Width;
+
 signals:
 
 public slots:
+
 };
 
 #endif  // __UNIT_DYNAMICOPTIONS_H

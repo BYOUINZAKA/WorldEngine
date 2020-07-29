@@ -1,3 +1,12 @@
+/*
+ * @Author: Hata
+ * @Date: 2020-06-17 12:44:13
+ * @LastEditors: Hata
+ * @LastEditTime: 2020-07-29 15:29:40
+ * @FilePath: \WorldEngine\WorldEngine\unit\colors.h
+ * @Description: 辅助计算颜色的工具库
+ */
+
 #ifndef __UNIT_COLORS_H
 #define __UNIT_COLORS_H
 

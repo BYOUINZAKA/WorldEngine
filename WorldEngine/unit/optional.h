@@ -4,11 +4,11 @@
  * @LastEditors: Hata
  * @LastEditTime: 2020-07-29 10:03:38
  * @FilePath: \WorldEngine\WorldEngine\unit\optional.h
- * @Description: Simulation the std::optional(C++17) in C++11.
+ * @Description: 模拟C++17的std::optional的Optional类
  */
 
-#ifndef OPTIONAL_H
-#define OPTIONAL_H
+#ifndef __UNIT_OPTIONAL_H
+#define __UNIT_OPTIONAL_H
 
 #include <exception>
 #include <type_traits>
@@ -16,12 +16,16 @@
 
 class EBadOptionalAccess : public std::exception {};
 
+// 等价于 std::nullopt_t(C++17)
 struct NullOptional {};
 
+// 等价于 std::nullopt(C++17)
 constexpr NullOptional null_optional;
 
+// 等价于 std::optional(C++17)
 template <class T>
 class Optional {
+    // 判断构造函数接受参数的辅助类
     template <class U>
     struct optional_construct_helper {
         constexpr static bool value = !std::is_constructible<T, Optional<U>&>::value &&
@@ -34,10 +38,8 @@ class Optional {
                                       !std::is_convertible<const Optional<U>&&, T>::value;
     };
 
-    bool has_value;
-    T value;
-
 public:
+    // 参考: https://en.cppreference.com/w/cpp/utility/optional/optional
     constexpr Optional() noexcept : has_value{false}, value{} {}
 
     template <class U, typename std::enable_if<std::is_constructible<T, const U&>::value &&
@@ -102,6 +104,11 @@ public:
 
     ~Optional() = default;
 
+private:
+    bool has_value;
+    T value;
+
+public:
     constexpr bool hasValue() const noexcept { return has_value; }
 
     constexpr explicit operator bool() const noexcept { return hasValue(); }
@@ -161,4 +168,4 @@ public:
     }
 };
 
-#endif  // OPTIONAL_H
+#endif  // __UNIT_OPTIONAL_H
